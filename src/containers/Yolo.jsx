@@ -85,7 +85,6 @@ const Yolo = () => {
 
       <View style={styles.cardWrapper}>
         <View style={styles.card}>
-
           <Animated.View
             style={[
               styles.frostOverlay,
@@ -102,7 +101,7 @@ const Yolo = () => {
               },
             ]}>
             <Image
-              source={require('../assets/xyz.png')} // Add frost texture image
+              source={require('../assets/xyz.png')}
               style={styles.frostTexture}
             />
           </Animated.View>
@@ -342,7 +341,7 @@ const styles = StyleSheet.create({
   freezeText: {
     fontFamily: FontFamily.poppinsRegular,
     color: 'white',
-    fontSize: width * 0.035,
+    fontSize: width * 0.03,
     marginTop: width * 0.01,
   },
   frostOverlay: {
@@ -351,9 +350,9 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    zIndex: 2,
+    zIndex: 200,
     borderRadius: 20,
-    overflow: 'hidden',
+    // overflow: 'hidden',
   },
   frostTexture: {
     width: width * 0.66,
@@ -361,9 +360,9 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: width * 0.05,
     borderRadius: 20,
+    ...StyleSheet.absoluteFillObject,
   },
   frozenCard: {
-    filter: 'blur(1px)',
     opacity: 0.8,
   },
 });
