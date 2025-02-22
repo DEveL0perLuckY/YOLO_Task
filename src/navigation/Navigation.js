@@ -12,8 +12,8 @@ const Navigation = () => {
         screenOptions={{
           headerShown: false,
           orientation: 'portrait_up',
-          statusBarBackgroundColor: '#e3f2fd',
-          statusBarStyle: 'dark',
+          statusBarBackgroundColor: 'black',
+          statusBarStyle: 'light',
         }}>
         <Stack.Screen name="Tabs" component={TabNavigator} />
       </Stack.Navigator>
