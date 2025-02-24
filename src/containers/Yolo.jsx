@@ -17,31 +17,19 @@ import Clipboard from '@react-native-clipboard/clipboard';
 const {width} = Dimensions.get('window');
 
 const Yolo = () => {
-  // State for CVV visibility
   const [cvvVisible, setCvvVisible] = useState(false);
-
-  // State for freeze/unfreeze
   const [isFrozen, setIsFrozen] = useState(false);
-
-  // Animation value for freeze effect
   const freezeAnim = useRef(new Animated.Value(0)).current;
-
-  // 1. Copy details function
   const handleCopyDetails = () => {
     const cardDetails = `Card Number: 8124 1242 3033 9211\nExpiry: 01/28\nCVV: 123`;
     Clipboard.setString(cardDetails);
     ToastAndroid.show('Details copied!', ToastAndroid.SHORT);
   };
-
-  // 2. Toggle CVV visibility
   const toggleCvvVisibility = () => {
     setCvvVisible(!cvvVisible);
   };
-
-  // 3. Toggle freeze/unfreeze with animation
   const toggleFreeze = () => {
     if (isFrozen) {
-      // Unfreeze animation
       Animated.timing(freezeAnim, {
         toValue: 0,
         duration: 2000,
@@ -52,7 +40,6 @@ const Yolo = () => {
         ToastAndroid.show('Card unfrozen!', ToastAndroid.SHORT);
       });
     } else {
-      // Freeze animation
       Animated.timing(freezeAnim, {
         toValue: 1,
         duration: 2000,
@@ -130,7 +117,7 @@ const Yolo = () => {
                 style={{
                   flex: 1,
                   flexDirection: 'column',
-                  top: width * 0.2,
+                  top: width * 0.08,
                   left: width * 0.1,
                 }}>
                 <Text style={styles.detailLabel}>expiry</Text>
@@ -140,31 +127,35 @@ const Yolo = () => {
                 style={{
                   flex: 1,
                   flexDirection: 'column',
-                  top: width * 0.22,
+                  top: -width * 0.07,
                   left: width * 0.1,
                 }}>
                 <Text style={styles.detailLabel}>cvv</Text>
                 <Text style={styles.detailValue}>
                   {cvvVisible ? '123' : '***'}
                 </Text>
-                <TouchableOpacity
-                  onPress={toggleCvvVisibility}
-                  style={styles.eyeIconContainer}>
-                  <Ionicons
-                    name={cvvVisible ? 'eye-outline' : 'eye-off-outline'}
-                    size={20}
-                    color={cvvVisible ? 'white' : 'red'}
-                  />
-                </TouchableOpacity>
+                {!isFrozen && (
+                  <TouchableOpacity
+                    onPress={toggleCvvVisibility}
+                    style={styles.eyeIconContainer}>
+                    <Ionicons
+                      name={cvvVisible ? 'eye-outline' : 'eye-off-outline'}
+                      size={20}
+                      color={cvvVisible ? 'white' : 'red'}
+                    />
+                  </TouchableOpacity>
+                )}
               </View>
             </View>
           </View>
-          <TouchableOpacity
-            style={styles.copyContainer}
-            onPress={handleCopyDetails}>
-            <Ionicons name="copy-outline" size={16} color="red" />
-            <Text style={styles.copyText}>copy details</Text>
-          </TouchableOpacity>
+          {!isFrozen && (
+            <TouchableOpacity
+              style={styles.copyContainer}
+              onPress={handleCopyDetails}>
+              <Ionicons name="copy-outline" size={16} color="red" />
+              <Text style={styles.copyText}>copy details</Text>
+            </TouchableOpacity>
+          )}
 
           <Image
             source={require('../assets/Ruppay.png')}
@@ -252,15 +243,14 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   cardBackground: {
-    width: width * 0.66,
-    height: width * 1,
+    width: width * 0.55,
+    height: width * 0.8,
     position: 'absolute',
-    top: width * 0.05,
     borderRadius: 20,
   },
   card: {
-    width: width * 0.75,
-    height: width * 0.45,
+    width: width * 0.55,
+    height: width * 0.8,
   },
   cardHeader: {
     flexDirection: 'row',
@@ -268,26 +258,26 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   yoloLogo: {
-    width: width * 0.25,
-    height: width * 0.05,
+    width: width * 0.2,
+    height: width * 0.04,
     resizeMode: 'contain',
-    top: width * 0.08,
+    top: width * 0.02,
     left: width * 0.01,
   },
   bankLogo: {
-    width: width * 0.24,
+    width: width * 0.18,
     height: width * 0.1,
     resizeMode: 'contain',
-    top: width * 0.08,
-    right: width * 0.12,
+    top: width * 0.02,
+    left: -12,
   },
   cardNumber: {
     fontFamily: FontFamily.poppinsSemiBold,
     color: 'white',
-    fontSize: width * 0.05,
+    fontSize: width * 0.04,
     letterSpacing: 2,
-    marginVertical: width * 0.04,
-    top: width * 0.2,
+    // marginVertical: width * 0.04,
+    top: width * 0.08,
   },
   detailLabel: {
     fontFamily: FontFamily.poppinsRegular,
@@ -298,19 +288,20 @@ const styles = StyleSheet.create({
     fontFamily: FontFamily.poppinsSemiBold,
     color: 'white',
     fontSize: width * 0.04,
-    marginTop: width * 0.005,
+    // marginTop: width * 0.005,
   },
   eyeIconContainer: {
     position: 'absolute',
     top: width * 0.05,
-    right: width * 0.33,
-    zIndex: 20,
+    left: width * 0.13,
+    zIndex: 300,
   },
   copyContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    top: width * 0.22,
+    top: -width * 0.22,
     left: 20,
+    zIndex: 300,
   },
   copyText: {
     fontFamily: FontFamily.poppinsMedium,
@@ -320,16 +311,17 @@ const styles = StyleSheet.create({
   },
   rupayLogo: {
     position: 'absolute',
-    width: 90,
-    height: 244,
-    bottom: -290,
-    right: 50,
+    width: 70,
+    height: 234,
+    bottom: -80,
+    right: 12,
     resizeMode: 'contain',
   },
   freezeContainer: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
+    top: width * 0.3,
   },
   freezeButton: {
     backgroundColor: 'black',
@@ -352,17 +344,16 @@ const styles = StyleSheet.create({
     bottom: 0,
     zIndex: 200,
     borderRadius: 20,
-    // overflow: 'hidden',
   },
   frostTexture: {
-    width: width * 0.66,
-    height: width * 1,
+    width: width * 0.55,
+    height: width * 0.8,
     position: 'absolute',
-    top: width * 0.05,
     borderRadius: 20,
     ...StyleSheet.absoluteFillObject,
   },
   frozenCard: {
-    opacity: 0.8,
+    opacity: 0.3,
+    zIndex: 400,
   },
 });
